@@ -48,7 +48,6 @@ func CrossProcessingFilter(img image.Image, midpoint, factor float64) *image.NRG
 	sig0 := sigmoid(a, b, 0)
 	sig1 := sigmoid(a, b, 1)
 
-	// TODO: Is there a existing library for Euler's number?
 	e := 1.0e-6
 
 	for i := 0; i < 256; i++ {
