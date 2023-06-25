@@ -3,14 +3,11 @@ package main
 import (
 	"bytes"
 	"github.com/disintegration/imaging"
+	"github.com/mutschler/mt/filter"
 	"image"
 	"image/color"
 	"math"
 )
-
-func clamp(v float64) uint8 {
-	return uint8(math.Min(math.Max(v, 0.0), 255.0) + 0.5)
-}
 
 // COMMENT: This might be better as a method on a struct
 func sigmoid(a, b, x float64) float64 {
@@ -54,21 +51,21 @@ func CrossProcessingFilter(img image.Image, midpoint, factor float64) *image.NRG
 		x := float64(i) / 255.0
 		sigX := sigmoid(a, b, x)
 		f := (sigX - sig0) / (sig1 - sig0)
-		red[i] = clamp(f * 255.0)
+		red[i] = filter.Clamp(f * 255.0)
 	}
 
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
 		sigX := sigmoid(a, b, x)
 		f := (sigX - sig0) / (sig1 - sig0)
-		green[i] = clamp(f * 255.0)
+		green[i] = filter.Clamp(f * 255.0)
 	}
 
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
 		arg := math.Min(math.Max((sig1-sig0)*x+sig0, e), 1.0-e)
 		f := a - math.Log(1.0/arg-1.0)/b
-		blue[i] = clamp(f * 255.0)
+		blue[i] = filter.Clamp(f * 255.0)
 	}
 
 	fn := func(c color.NRGBA) color.NRGBA {
