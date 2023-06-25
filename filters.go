@@ -9,11 +9,6 @@ import (
 	"math"
 )
 
-// COMMENT: This might be better as a method on a struct
-func sigmoid(a, b, x float64) float64 {
-	return 1 / (1 + math.Exp(b*(a-x)))
-}
-
 // ImageStrip look
 func ImageStripFilter(img image.Image) image.Image {
 	l, _ := Asset("strip_left.jpg")
@@ -42,21 +37,21 @@ func CrossProcessingFilter(img image.Image, midpoint, factor float64) *image.NRG
 	blue := make([]uint8, 256)
 	a := math.Min(math.Max(midpoint, 0.0), 1.0)
 	b := math.Abs(factor)
-	sig0 := sigmoid(a, b, 0)
-	sig1 := sigmoid(a, b, 1)
+	sig0 := filter.Sigmoid(a, b, 0)
+	sig1 := filter.Sigmoid(a, b, 1)
 
 	e := 1.0e-6
 
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
-		sigX := sigmoid(a, b, x)
+		sigX := filter.Sigmoid(a, b, x)
 		f := (sigX - sig0) / (sig1 - sig0)
 		red[i] = filter.Clamp(f * 255.0)
 	}
 
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
-		sigX := sigmoid(a, b, x)
+		sigX := filter.Sigmoid(a, b, x)
 		f := (sigX - sig0) / (sig1 - sig0)
 		green[i] = filter.Clamp(f * 255.0)
 	}
