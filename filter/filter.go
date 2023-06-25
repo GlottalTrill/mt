@@ -5,6 +5,11 @@ import "math"
 const (
 	// E is 0.0000010
 	E = 1.0e-6
+
+	// Midpoint best results with 0.5
+	Midpoint = 0.5
+	// Factor best results with 10
+	Factor = 10
 )
 
 // Clamp needs a more detailed comment ;)

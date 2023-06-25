@@ -29,14 +29,14 @@ func ImageStripFilter(img image.Image) image.Image {
 }
 
 // sigmoid function to simulate image cross processing, best results with midpoint: 0.5 and factor 10
-func CrossProcessingFilter(img image.Image, midpoint, factor float64) *image.NRGBA {
+func CrossProcessingFilter(img image.Image) *image.NRGBA {
 
 	// TODO:  move these to a colours package?
 	red := make([]uint8, 256)
 	green := make([]uint8, 256)
 	blue := make([]uint8, 256)
-	a := math.Min(math.Max(midpoint, 0.0), 1.0)
-	b := math.Abs(factor)
+	a := math.Min(math.Max(filter.Midpoint, 0.0), 1.0)
+	b := math.Abs(filter.Factor)
 	sig0 := filter.Sigmoid(a, b, 0)
 	sig1 := filter.Sigmoid(a, b, 1)
 

@@ -244,7 +244,7 @@ func GenerateScreenshots(fn string) []image.Image {
 				img = dst
 			case "cross":
 				log.Debug("cross filter applied")
-				img = CrossProcessingFilter(img, 0.5, 9)
+				img = CrossProcessingFilter(img)
 			case "strip":
 				log.Debug("image stip filter applied")
 				//draw timestamp!
