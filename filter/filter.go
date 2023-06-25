@@ -2,6 +2,11 @@ package filter
 
 import "math"
 
+const (
+	// E is 0.0000010
+	E = 1.0e-6
+)
+
 // Clamp needs a more detailed comment ;)
 // color conversion?
 func Clamp(v float64) uint8 {

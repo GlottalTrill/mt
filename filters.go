@@ -40,8 +40,6 @@ func CrossProcessingFilter(img image.Image, midpoint, factor float64) *image.NRG
 	sig0 := filter.Sigmoid(a, b, 0)
 	sig1 := filter.Sigmoid(a, b, 1)
 
-	e := 1.0e-6
-
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
 		sigX := filter.Sigmoid(a, b, x)
@@ -58,7 +56,7 @@ func CrossProcessingFilter(img image.Image, midpoint, factor float64) *image.NRG
 
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
-		arg := math.Min(math.Max((sig1-sig0)*x+sig0, e), 1.0-e)
+		arg := math.Min(math.Max((sig1-sig0)*x+sig0, filter.E), 1.0-filter.E)
 		f := a - math.Log(1.0/arg-1.0)/b
 		blue[i] = filter.Clamp(f * 255.0)
 	}
