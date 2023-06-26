@@ -16,7 +16,7 @@ func ImageStripFilter(img image.Image) image.Image {
 	strip, _ := imaging.Decode(lr)
 	strip = imaging.Resize(strip, 0, img.Bounds().Dy(), imaging.Lanczos)
 
-	dst := imaging.New((2*strip.Bounds().Dx())+img.Bounds().Dx(), img.Bounds().Dy(), color.NRGBA{0, 0, 0, 0})
+	dst := imaging.New((2*strip.Bounds().Dx())+img.Bounds().Dx(), img.Bounds().Dy(), color.NRGBA{})
 	dst = imaging.Paste(dst, img, image.Pt(strip.Bounds().Dx(), 0))
 	dst = imaging.Paste(dst, strip, image.Pt(0, 0))
 
@@ -62,7 +62,7 @@ func CrossProcessingFilter(img image.Image) *image.NRGBA {
 	}
 
 	fn := func(c color.NRGBA) color.NRGBA {
-		return color.NRGBA{red[c.R], green[c.G], blue[c.B], c.A}
+		return color.NRGBA{R: red[c.R], G: green[c.G], B: blue[c.B], A: c.A}
 	}
 
 	return imaging.AdjustFunc(img, fn)
