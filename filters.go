@@ -9,11 +9,12 @@ import (
 	"math"
 )
 
-// ImageStrip look
+// ImageStripFilter adds "filmstrips" to the left and right sides of a passed image
 func ImageStripFilter(img image.Image) image.Image {
 	l, _ := Asset("strip_left.jpg")
 	lr := bytes.NewReader(l)
 	strip, _ := imaging.Decode(lr)
+	// resize the "filmstrip" to match the height of the passed image
 	strip = imaging.Resize(strip, 0, img.Bounds().Dy(), imaging.Lanczos)
 
 	dst := imaging.New((2*strip.Bounds().Dx())+img.Bounds().Dx(), img.Bounds().Dy(), color.NRGBA{})
@@ -28,7 +29,8 @@ func ImageStripFilter(img image.Image) image.Image {
 	return dst
 }
 
-// sigmoid function to simulate image cross processing, best results with midpoint: 0.5 and factor 10
+// CrossProcessingFilter wraps the sigmoid function to simulate image cross processing.
+// Best results with midpoint: 0.5 and factor 10
 func CrossProcessingFilter(img image.Image) *image.NRGBA {
 
 	// TODO:  move these to a colours package?
