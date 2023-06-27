@@ -12,7 +12,7 @@ func TestClamp(t *testing.T) {
 	}
 
 	for _, tt := range clampTests {
-		got := Clamp(tt.input1 * tt.input2)
+		got := clamp(tt.input1 * tt.input2)
 		if got != tt.want {
 			t.Errorf("got %v want %v", got, tt.want)
 		}
