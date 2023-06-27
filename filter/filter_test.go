@@ -22,7 +22,7 @@ func TestClamp(t *testing.T) {
 func TestSigmoid(t *testing.T) {
 	var want float64 = 0
 
-	got := Sigmoid(10, 245, 3)
+	got := sigmoid(10, 245, 3)
 	if got != want {
 		t.Errorf("got %v want %v", got, want)
 	}

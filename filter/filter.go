@@ -23,28 +23,28 @@ func Clamp(v float64) uint8 {
 	return uint8(math.Min(math.Max(v, 0.0), 255.0) + 0.5)
 }
 
-// CrossProcessingFilter wraps the sigmoid function to simulate image cross processing.
+// CrossProcessing wraps the sigmoid function to simulate image cross processing.
 // Best results with midpoint: 0.5 and factor 10
-func CrossProcessingFilter(img image.Image) *image.NRGBA {
+func CrossProcessing(img image.Image) *image.NRGBA {
 	// TODO:  move these to a colours package?
 	red := make([]uint8, 256)
 	green := make([]uint8, 256)
 	blue := make([]uint8, 256)
 	a := math.Min(math.Max(Midpoint, 0.0), 1.0)
 	b := math.Abs(Factor)
-	sig0 := Sigmoid(a, b, 0)
-	sig1 := Sigmoid(a, b, 1)
+	sig0 := sigmoid(a, b, 0)
+	sig1 := sigmoid(a, b, 1)
 
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
-		sigX := Sigmoid(a, b, x)
+		sigX := sigmoid(a, b, x)
 		f := (sigX - sig0) / (sig1 - sig0)
 		red[i] = Clamp(f * 255.0)
 	}
 
 	for i := 0; i < 256; i++ {
 		x := float64(i) / 255.0
-		sigX := Sigmoid(a, b, x)
+		sigX := sigmoid(a, b, x)
 		f := (sigX - sig0) / (sig1 - sig0)
 		green[i] = Clamp(f * 255.0)
 	}
@@ -77,8 +77,8 @@ func AddStripsToImage(img, leftStrip, rightStrip image.Image) image.Image {
 	return dst
 }
 
-// Sigmoid
+// sigmoid
 // Consider replacing with https://github.com/montanaflynn/stats
-func Sigmoid(a, b, x float64) float64 {
+func sigmoid(a, b, x float64) float64 {
 	return 1 / (1 + math.Exp(b*(a-x)))
 }
