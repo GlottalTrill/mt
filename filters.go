@@ -9,30 +9,26 @@ import (
 	"math"
 )
 
-// ImageStripFilter adds "filmstrips" to the left and right sides of a passed image
+// ImageStripFilter wraps AddStripsToImage because Asset() is declared in package main
+// and will take longer to refactor out.
+// DEPRECATION: AddStripsToImage will replace this
 func ImageStripFilter(img image.Image) image.Image {
 	l, _ := Asset("strip_left.jpg")
 	lr := bytes.NewReader(l)
 	strip, _ := imaging.Decode(lr)
-	// resize the "filmstrip" to match the height of the passed image
-	strip = imaging.Resize(strip, 0, img.Bounds().Dy(), imaging.Lanczos)
-
-	dst := imaging.New((2*strip.Bounds().Dx())+img.Bounds().Dx(), img.Bounds().Dy(), color.NRGBA{})
-	dst = imaging.Paste(dst, img, image.Pt(strip.Bounds().Dx(), 0))
-	dst = imaging.Paste(dst, strip, image.Pt(0, 0))
 
 	r, _ := Asset("strip_right.jpg")
 	rr := bytes.NewReader(r)
 	stripr, _ := imaging.Decode(rr)
-	stripr = imaging.Resize(stripr, 0, img.Bounds().Dy(), imaging.Lanczos)
-	dst = imaging.Paste(dst, stripr, image.Pt(dst.Bounds().Dx()-stripr.Bounds().Dx(), 0))
-	return dst
+
+	modifiedImg := filter.AddStripsToImage(img, strip, stripr)
+
+	return modifiedImg
 }
 
 // CrossProcessingFilter wraps the sigmoid function to simulate image cross processing.
 // Best results with midpoint: 0.5 and factor 10
 func CrossProcessingFilter(img image.Image) *image.NRGBA {
-
 	// TODO:  move these to a colours package?
 	red := make([]uint8, 256)
 	green := make([]uint8, 256)
