@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/disintegration/imaging"
 	xfilter "github.com/mutschler/mt/filter"
+	"github.com/mutschler/mt/internal/bindata"
 	"image"
 )
 
@@ -11,11 +12,11 @@ import (
 // and will take longer to refactor out.
 // DEPRECATION: AddStripsToImage will replace this
 func ImageStripFilter(img image.Image) image.Image {
-	l, _ := Asset("strip_left.jpg")
+	l, _ := bindata.Asset("strip_left.jpg")
 	lr := bytes.NewReader(l)
 	strip, _ := imaging.Decode(lr)
 
-	r, _ := Asset("strip_right.jpg")
+	r, _ := bindata.Asset("strip_right.jpg")
 	rr := bytes.NewReader(r)
 	stripr, _ := imaging.Decode(rr)
 
