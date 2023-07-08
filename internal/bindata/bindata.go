@@ -44,16 +44,16 @@ func (fi binaryDataFileInfo) Sys() interface{} {
 	return nil
 }
 
-type _bintree_t struct {
+type binaryTreeT struct {
 	Func     func() (*asset, error)
-	Children map[string]*_bintree_t
+	Children map[string]*binaryTreeT
 }
 
-var _bintree = &_bintree_t{nil, map[string]*_bintree_t{
-	"DroidSans.ttf":   &_bintree_t{droidsans_ttf, map[string]*_bintree_t{}},
-	"logo.png":        &_bintree_t{logo_png, map[string]*_bintree_t{}},
-	"strip_left.jpg":  &_bintree_t{strip_left_jpg, map[string]*_bintree_t{}},
-	"strip_right.jpg": &_bintree_t{strip_right_jpg, map[string]*_bintree_t{}},
+var binaryTree = &binaryTreeT{nil, map[string]*binaryTreeT{
+	"DroidSans.ttf":   &binaryTreeT{droidsans_ttf, map[string]*binaryTreeT{}},
+	"logo.png":        &binaryTreeT{logo_png, map[string]*binaryTreeT{}},
+	"strip_left.jpg":  &binaryTreeT{strip_left_jpg, map[string]*binaryTreeT{}},
+	"strip_right.jpg": &binaryTreeT{strip_right_jpg, map[string]*binaryTreeT{}},
 }}
 
 // binaryData is a table, holding each asset generator, mapped to its name.
@@ -95,7 +95,7 @@ func Asset(name string) ([]byte, error) {
 // AssetDir("foo.txt") and AssetDir("notexist") would return an error
 // AssetDir("") will return []string{"data"}.
 func AssetDir(name string) ([]string, error) {
-	node := _bintree
+	node := binaryTree
 	if len(name) != 0 {
 		canonicalName := strings.Replace(name, "\\", "/", -1)
 		pathList := strings.Split(canonicalName, "/")
@@ -140,7 +140,7 @@ func AssetNames() []string {
 	return names
 }
 
-// Restore an assets under the given directory
+// RestoreAsset returns assets under the given directory
 func RestoreAsset(dir, name string) error {
 	data, err := Asset(name)
 	if err != nil {
@@ -165,7 +165,7 @@ func RestoreAsset(dir, name string) error {
 	return nil
 }
 
-// Restore assets under the given directory recursively
+// RestoreAssets returns assets under the given directory recursively
 func RestoreAssets(dir, name string) error {
 	children, err := AssetDir(name)
 	if err != nil { // File
@@ -181,7 +181,7 @@ func RestoreAssets(dir, name string) error {
 	return nil
 }
 
-func bindata_read(data []byte, name string) ([]byte, error) {
+func readBinaryData(data []byte, name string) ([]byte, error) {
 	gz, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
 		return nil, fmt.Errorf("Read %q: %v", name, err)
@@ -198,15 +198,15 @@ func bindata_read(data []byte, name string) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func strip_left_jpg_bytes() ([]byte, error) {
-	return bindata_read(
+func stripLeftJpgBytes() ([]byte, error) {
+	return readBinaryData(
 		stripLeftJpg,
 		"strip_left.jpg",
 	)
 }
 
 func strip_left_jpg() (*asset, error) {
-	jpgBytes, err := strip_left_jpg_bytes()
+	jpgBytes, err := stripLeftJpgBytes()
 	if err != nil {
 		return nil, err
 	}
@@ -216,15 +216,15 @@ func strip_left_jpg() (*asset, error) {
 	return a, nil
 }
 
-func strip_right_jpg_bytes() ([]byte, error) {
-	return bindata_read(
+func stripRightJpgBytes() ([]byte, error) {
+	return readBinaryData(
 		stripRightJpg,
 		"strip_right.jpg",
 	)
 }
 
 func strip_right_jpg() (*asset, error) {
-	jpgBytes, err := strip_right_jpg_bytes()
+	jpgBytes, err := stripRightJpgBytes()
 	if err != nil {
 		return nil, err
 	}
@@ -234,15 +234,15 @@ func strip_right_jpg() (*asset, error) {
 	return a, nil
 }
 
-func droidsans_ttf_bytes() ([]byte, error) {
-	return bindata_read(
+func droidsansTtfBytes() ([]byte, error) {
+	return readBinaryData(
 		droidsansTtf,
 		"DroidSans.ttf",
 	)
 }
 
 func droidsans_ttf() (*asset, error) {
-	ttfBytes, err := droidsans_ttf_bytes()
+	ttfBytes, err := droidsansTtfBytes()
 	if err != nil {
 		return nil, err
 	}
@@ -252,15 +252,15 @@ func droidsans_ttf() (*asset, error) {
 	return a, nil
 }
 
-func logo_png_bytes() ([]byte, error) {
-	return bindata_read(
+func logoPngBytes() ([]byte, error) {
+	return readBinaryData(
 		logoPng,
 		"logo.png",
 	)
 }
 
 func logo_png() (*asset, error) {
-	pngBytes, err := logo_png_bytes()
+	pngBytes, err := logoPngBytes()
 	if err != nil {
 		return nil, err
 	}
