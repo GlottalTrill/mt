@@ -57,17 +57,17 @@ func Asset(name string) ([]byte, error) {
 	if f, ok := binaryData[canonicalName]; ok {
 		a, err := f()
 		if err != nil {
-			return nil, fmt.Errorf("Asset %s can't read by error: %v", name, err)
+			return nil, fmt.Errorf("asset %s can't read by error: %v", name, err)
 		}
 		return a.bytes, nil
 	}
-	return nil, fmt.Errorf("Asset %s not found", name)
+	return nil, fmt.Errorf("asset %s not found", name)
 }
 
 func readBinaryData(data []byte, name string) ([]byte, error) {
 	gz, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		return nil, fmt.Errorf("read %q: %v", name, err)
 	}
 
 	var buf bytes.Buffer
@@ -78,7 +78,7 @@ func readBinaryData(data []byte, name string) ([]byte, error) {
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		return nil, fmt.Errorf("read %q: %v", name, err)
 	}
 
 	return buf.Bytes(), nil
