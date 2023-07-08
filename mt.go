@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	filter2 "github.com/mutschler/mt/filter"
+	"github.com/mutschler/mt/internal/bindata"
 	"image"
 	"image/draw"
 	"io/ioutil"
@@ -244,14 +247,23 @@ func GenerateScreenshots(fn string) []image.Image {
 				img = dst
 			case "cross":
 				log.Debug("cross filter applied")
-				img = CrossProcessingFilter(img)
+				img = filter2.CrossProcessing(img)
 			case "strip":
 				log.Debug("image stip filter applied")
 				//draw timestamp!
 				tsimage := drawTimestamp(timestamp)
 				img = imaging.Overlay(img, tsimage, image.Pt(img.Bounds().Dx()-tsimage.Bounds().Dx()-10, img.Bounds().Dy()-tsimage.Bounds().Dy()-10), viper.GetFloat64("timestamp_opacity"))
 				viper.Set("disable_timestamps", true)
-				img = ImageStripFilter(img)
+
+				l, _ := bindata.Asset("strip_left.jpg")
+				lr := bytes.NewReader(l)
+				strip, _ := imaging.Decode(lr)
+
+				r, _ := bindata.Asset("strip_right.jpg")
+				rr := bytes.NewReader(r)
+				stripr, _ := imaging.Decode(rr)
+
+				img = filter2.AddStripsToImage(img, strip, stripr)
 			}
 		}
 
