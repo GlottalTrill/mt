@@ -56,14 +56,6 @@ var _bintree = &_bintree_t{nil, map[string]*_bintree_t{
 	"strip_right.jpg": &_bintree_t{strip_right_jpg, map[string]*_bintree_t{}},
 }}
 
-// _bindata is a table, holding each asset generator, mapped to its name.
-var _bindata = map[string]func() (*asset, error){
-	"strip_left.jpg":  strip_left_jpg,
-	"strip_right.jpg": strip_right_jpg,
-	"DroidSans.ttf":   droidsans_ttf,
-	"logo.png":        logo_png,
-}
-
 // binaryData is a table, holding each asset generator, mapped to its name.
 var binaryData = map[string]func() (*asset, error){
 	"strip_left.jpg":  strip_left_jpg,
@@ -77,7 +69,7 @@ var binaryData = map[string]func() (*asset, error){
 // could not be loaded.
 func Asset(name string) ([]byte, error) {
 	canonicalName := strings.Replace(name, "\\", "/", -1)
-	if f, ok := _bindata[canonicalName]; ok {
+	if f, ok := binaryData[canonicalName]; ok {
 		a, err := f()
 		if err != nil {
 			return nil, fmt.Errorf("Asset %s can't read by error: %v", name, err)
@@ -129,7 +121,7 @@ func AssetDir(name string) ([]string, error) {
 // could not be loaded.
 func AssetInfo(name string) (os.FileInfo, error) {
 	canonicalName := strings.Replace(name, "\\", "/", -1)
-	if f, ok := _bindata[canonicalName]; ok {
+	if f, ok := binaryData[canonicalName]; ok {
 		a, err := f()
 		if err != nil {
 			return nil, fmt.Errorf("AssetInfo %s can't read by error: %v", name, err)
@@ -141,8 +133,8 @@ func AssetInfo(name string) (os.FileInfo, error) {
 
 // AssetNames returns the names of the assets.
 func AssetNames() []string {
-	names := make([]string, 0, len(_bindata))
-	for name := range _bindata {
+	names := make([]string, 0, len(binaryData))
+	for name := range binaryData {
 		names = append(names, name)
 	}
 	return names
