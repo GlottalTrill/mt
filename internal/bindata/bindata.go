@@ -72,7 +72,10 @@ func readBinaryData(data []byte, name string) ([]byte, error) {
 
 	var buf bytes.Buffer
 	_, err = io.Copy(&buf, gz)
-	gz.Close()
+	copyErr := gz.Close()
+	if copyErr != nil {
+		return nil, copyErr
+	}
 
 	if err != nil {
 		return nil, fmt.Errorf("Read %q: %v", name, err)
