@@ -208,7 +208,7 @@ func bindata_read(data []byte, name string) ([]byte, error) {
 
 func strip_left_jpg_bytes() ([]byte, error) {
 	return bindata_read(
-		_strip_left_jpg,
+		stripLeftJpg,
 		"strip_left.jpg",
 	)
 }
@@ -226,7 +226,7 @@ func strip_left_jpg() (*asset, error) {
 
 func strip_right_jpg_bytes() ([]byte, error) {
 	return bindata_read(
-		_strip_right_jpg,
+		stripRightJpg,
 		"strip_right.jpg",
 	)
 }
@@ -244,7 +244,7 @@ func strip_right_jpg() (*asset, error) {
 
 func droidsans_ttf_bytes() ([]byte, error) {
 	return bindata_read(
-		_droidsans_ttf,
+		droidsansTtf,
 		"DroidSans.ttf",
 	)
 }
@@ -262,7 +262,7 @@ func droidsans_ttf() (*asset, error) {
 
 func logo_png_bytes() ([]byte, error) {
 	return bindata_read(
-		_logo_png,
+		logoPng,
 		"logo.png",
 	)
 }
