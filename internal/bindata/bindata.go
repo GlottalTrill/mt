@@ -18,29 +18,29 @@ type asset struct {
 	info  os.FileInfo
 }
 
-type bindata_file_info struct {
+type binaryDataFileInfo struct {
 	name    string
 	size    int64
 	mode    os.FileMode
 	modTime time.Time
 }
 
-func (fi bindata_file_info) Name() string {
+func (fi binaryDataFileInfo) Name() string {
 	return fi.name
 }
-func (fi bindata_file_info) Size() int64 {
+func (fi binaryDataFileInfo) Size() int64 {
 	return fi.size
 }
-func (fi bindata_file_info) Mode() os.FileMode {
+func (fi binaryDataFileInfo) Mode() os.FileMode {
 	return fi.mode
 }
-func (fi bindata_file_info) ModTime() time.Time {
+func (fi binaryDataFileInfo) ModTime() time.Time {
 	return fi.modTime
 }
-func (fi bindata_file_info) IsDir() bool {
+func (fi binaryDataFileInfo) IsDir() bool {
 	return false
 }
-func (fi bindata_file_info) Sys() interface{} {
+func (fi binaryDataFileInfo) Sys() interface{} {
 	return nil
 }
 
@@ -211,7 +211,7 @@ func strip_left_jpg() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindata_file_info{name: "strip_left.jpg", size: 19017, mode: os.FileMode(384), modTime: time.Unix(1439890851, 0)}
+	info := binaryDataFileInfo{name: "strip_left.jpg", size: 19017, mode: os.FileMode(384), modTime: time.Unix(1439890851, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -229,7 +229,7 @@ func strip_right_jpg() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindata_file_info{name: "strip_right.jpg", size: 26871, mode: os.FileMode(384), modTime: time.Unix(1439890913, 0)}
+	info := binaryDataFileInfo{name: "strip_right.jpg", size: 26871, mode: os.FileMode(384), modTime: time.Unix(1439890913, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -247,7 +247,7 @@ func droidsans_ttf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindata_file_info{name: "DroidSans.ttf", size: 41028, mode: os.FileMode(493), modTime: time.Unix(1437542528, 0)}
+	info := binaryDataFileInfo{name: "DroidSans.ttf", size: 41028, mode: os.FileMode(493), modTime: time.Unix(1437542528, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -265,7 +265,7 @@ func logo_png() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindata_file_info{name: "logo.png", size: 13698, mode: os.FileMode(420), modTime: time.Unix(1437404635, 0)}
+	info := binaryDataFileInfo{name: "logo.png", size: 13698, mode: os.FileMode(420), modTime: time.Unix(1437404635, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
