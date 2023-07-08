@@ -97,8 +97,8 @@ func Asset(name string) ([]byte, error) {
 func AssetDir(name string) ([]string, error) {
 	node := _bintree
 	if len(name) != 0 {
-		cannonicalName := strings.Replace(name, "\\", "/", -1)
-		pathList := strings.Split(cannonicalName, "/")
+		canonicalName := strings.Replace(name, "\\", "/", -1)
+		pathList := strings.Split(canonicalName, "/")
 		for _, p := range pathList {
 			node = node.Children[p]
 			if node == nil {
@@ -206,13 +206,13 @@ func strip_left_jpg_bytes() ([]byte, error) {
 }
 
 func strip_left_jpg() (*asset, error) {
-	bytes, err := strip_left_jpg_bytes()
+	jpgBytes, err := strip_left_jpg_bytes()
 	if err != nil {
 		return nil, err
 	}
 
 	info := binaryDataFileInfo{name: "strip_left.jpg", size: 19017, mode: os.FileMode(384), modTime: time.Unix(1439890851, 0)}
-	a := &asset{bytes: bytes, info: info}
+	a := &asset{bytes: jpgBytes, info: info}
 	return a, nil
 }
 
@@ -224,13 +224,13 @@ func strip_right_jpg_bytes() ([]byte, error) {
 }
 
 func strip_right_jpg() (*asset, error) {
-	bytes, err := strip_right_jpg_bytes()
+	jpgBytes, err := strip_right_jpg_bytes()
 	if err != nil {
 		return nil, err
 	}
 
 	info := binaryDataFileInfo{name: "strip_right.jpg", size: 26871, mode: os.FileMode(384), modTime: time.Unix(1439890913, 0)}
-	a := &asset{bytes: bytes, info: info}
+	a := &asset{bytes: jpgBytes, info: info}
 	return a, nil
 }
 
@@ -242,13 +242,13 @@ func droidsans_ttf_bytes() ([]byte, error) {
 }
 
 func droidsans_ttf() (*asset, error) {
-	bytes, err := droidsans_ttf_bytes()
+	ttfBytes, err := droidsans_ttf_bytes()
 	if err != nil {
 		return nil, err
 	}
 
 	info := binaryDataFileInfo{name: "DroidSans.ttf", size: 41028, mode: os.FileMode(493), modTime: time.Unix(1437542528, 0)}
-	a := &asset{bytes: bytes, info: info}
+	a := &asset{bytes: ttfBytes, info: info}
 	return a, nil
 }
 
@@ -260,13 +260,13 @@ func logo_png_bytes() ([]byte, error) {
 }
 
 func logo_png() (*asset, error) {
-	bytes, err := logo_png_bytes()
+	pngBytes, err := logo_png_bytes()
 	if err != nil {
 		return nil, err
 	}
 
 	info := binaryDataFileInfo{name: "logo.png", size: 13698, mode: os.FileMode(420), modTime: time.Unix(1437404635, 0)}
-	a := &asset{bytes: bytes, info: info}
+	a := &asset{bytes: pngBytes, info: info}
 	return a, nil
 }
 
