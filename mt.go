@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/mutschler/mt/filter"
+	"github.com/mutschler/mt/internal/bindata"
 	"image"
 	"image/draw"
 	"io/ioutil"
@@ -208,10 +211,11 @@ func GenerateScreenshots(fn string) []image.Image {
 			img = imaging.Resize(img, 0, viper.GetInt("height"), imaging.Lanczos)
 		}
 
+		// TODO: Move this to config.go
 		//apply filters
-		filters := strings.Split(viper.GetString("filter"), ",")
-		for _, filter := range filters {
-			switch filter {
+		possibleFilters := strings.Split(viper.GetString("filter"), ",")
+		for _, possibleFilter := range possibleFilters {
+			switch possibleFilter {
 			case "greyscale":
 				img = imaging.Grayscale(img)
 				img = imaging.Sharpen(img, 1.0)
@@ -244,14 +248,23 @@ func GenerateScreenshots(fn string) []image.Image {
 				img = dst
 			case "cross":
 				log.Debug("cross filter applied")
-				img = CrossProcessingFilter(img, 0.5, 9)
+				img = filter.CrossProcessing(img)
 			case "strip":
 				log.Debug("image stip filter applied")
 				//draw timestamp!
 				tsimage := drawTimestamp(timestamp)
 				img = imaging.Overlay(img, tsimage, image.Pt(img.Bounds().Dx()-tsimage.Bounds().Dx()-10, img.Bounds().Dy()-tsimage.Bounds().Dy()-10), viper.GetFloat64("timestamp_opacity"))
 				viper.Set("disable_timestamps", true)
-				img = ImageStripFilter(img)
+
+				l, _ := bindata.Asset("strip_left.jpg")
+				lr := bytes.NewReader(l)
+				strip, _ := imaging.Decode(lr)
+
+				r, _ := bindata.Asset("strip_right.jpg")
+				rr := bytes.NewReader(r)
+				stripr, _ := imaging.Decode(rr)
+
+				img = filter.AddStripsToImage(img, strip, stripr)
 			}
 		}
 
@@ -639,7 +652,7 @@ NOTE: fancy has best results if it is applied as last filter!
 	log.Debugf("config values: %s", b)
 
 	var errFont error
-	fontBytes, errFont = getFont(viper.GetString("font_all"))
+	fontBytes, errFont = bindata.GetFont(viper.GetString("font_all"))
 	if errFont != nil {
 		log.Warn("unable to load font, disabling timestamps and header")
 	}
