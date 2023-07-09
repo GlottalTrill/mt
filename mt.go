@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	filter2 "github.com/mutschler/mt/filter"
+	"github.com/mutschler/mt/filter"
 	"github.com/mutschler/mt/internal/bindata"
 	"image"
 	"image/draw"
@@ -248,7 +248,7 @@ func GenerateScreenshots(fn string) []image.Image {
 				img = dst
 			case "cross":
 				log.Debug("cross filter applied")
-				img = filter2.CrossProcessing(img)
+				img = filter.CrossProcessing(img)
 			case "strip":
 				log.Debug("image stip filter applied")
 				//draw timestamp!
@@ -264,7 +264,7 @@ func GenerateScreenshots(fn string) []image.Image {
 				rr := bytes.NewReader(r)
 				stripr, _ := imaging.Decode(rr)
 
-				img = filter2.AddStripsToImage(img, strip, stripr)
+				img = filter.AddStripsToImage(img, strip, stripr)
 			}
 		}
 
