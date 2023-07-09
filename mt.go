@@ -211,10 +211,11 @@ func GenerateScreenshots(fn string) []image.Image {
 			img = imaging.Resize(img, 0, viper.GetInt("height"), imaging.Lanczos)
 		}
 
+		// TODO: Move this to config.go
 		//apply filters
-		filters := strings.Split(viper.GetString("filter"), ",")
-		for _, filter := range filters {
-			switch filter {
+		possibleFilters := strings.Split(viper.GetString("filter"), ",")
+		for _, possibleFilter := range possibleFilters {
+			switch possibleFilter {
 			case "greyscale":
 				img = imaging.Grayscale(img)
 				img = imaging.Sharpen(img, 1.0)
