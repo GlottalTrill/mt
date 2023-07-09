@@ -6,7 +6,6 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -52,6 +51,9 @@ var binaryData = map[string]func() (*asset, error){
 	"logo.png":        logo_png,
 }
 
+// fontDirectories a list of directories in which to search for a suitable font file.
+var fontDirectories = []string{"/Library/Fonts/", "/usr/share/fonts/", "./"}
+
 // Asset loads and returns the assets for the given name.
 // It returns an error if the assets could not be found or
 // could not be loaded.
@@ -67,8 +69,7 @@ func Asset(name string) ([]byte, error) {
 	return nil, fmt.Errorf("asset %s not found", name)
 }
 
-// get font path for fontname
-// searches in common font paths, bindata or absoute path
+// GetFont returns path for font by searching in common font paths, bindata or absoute path
 func GetFont(f string) ([]byte, error) {
 	if !strings.HasSuffix(f, ".ttf") {
 		f = fmt.Sprintf("%s.ttf", f)
@@ -76,16 +77,15 @@ func GetFont(f string) ([]byte, error) {
 	if strings.Contains(f, "/") && strings.HasSuffix(f, ".ttf") {
 		if _, err := os.Stat(f); err == nil {
 			log.Infof("using font: %s", f)
-			return ioutil.ReadFile(f)
+			return os.ReadFile(f)
 		}
 	}
-	fdirs := []string{"/Library/Fonts/", "/usr/share/fonts/", "./"}
 
-	for _, dir := range fdirs {
-		fpath := filepath.Join(dir, f)
-		if _, err := os.Stat(fpath); err == nil {
-			log.Infof("using font: %s", fpath)
-			return ioutil.ReadFile(fpath)
+	for _, dir := range fontDirectories {
+		fontPath := filepath.Join(dir, f)
+		if _, err := os.Stat(fontPath); err == nil {
+			log.Infof("using font: %s", fontPath)
+			return os.ReadFile(fontPath)
 		}
 	}
 	log.Info("using font: DroidSans.ttf")
