@@ -4,8 +4,11 @@ import (
 	"bytes"
 	"compress/gzip"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -62,6 +65,31 @@ func Asset(name string) ([]byte, error) {
 		return a.bytes, nil
 	}
 	return nil, fmt.Errorf("asset %s not found", name)
+}
+
+// get font path for fontname
+// searches in common font paths, bindata or absoute path
+func GetFont(f string) ([]byte, error) {
+	if !strings.HasSuffix(f, ".ttf") {
+		f = fmt.Sprintf("%s.ttf", f)
+	}
+	if strings.Contains(f, "/") && strings.HasSuffix(f, ".ttf") {
+		if _, err := os.Stat(f); err == nil {
+			log.Infof("using font: %s", f)
+			return ioutil.ReadFile(f)
+		}
+	}
+	fdirs := []string{"/Library/Fonts/", "/usr/share/fonts/", "./"}
+
+	for _, dir := range fdirs {
+		fpath := filepath.Join(dir, f)
+		if _, err := os.Stat(fpath); err == nil {
+			log.Infof("using font: %s", fpath)
+			return ioutil.ReadFile(fpath)
+		}
+	}
+	log.Info("using font: DroidSans.ttf")
+	return Asset("DroidSans.ttf")
 }
 
 func readBinaryData(data []byte, name string) ([]byte, error) {

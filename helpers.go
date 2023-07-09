@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -128,31 +127,6 @@ func countBlankPixels(c color.NRGBA) color.NRGBA {
 	allPixels = allPixels + 1
 
 	return color.NRGBA{c.R, c.G, c.B, c.A}
-}
-
-// get font path for fontname
-// searches in common font paths, bindata or absoute path
-func getFont(f string) ([]byte, error) {
-	if !strings.HasSuffix(f, ".ttf") {
-		f = fmt.Sprintf("%s.ttf", f)
-	}
-	if strings.Contains(f, "/") && strings.HasSuffix(f, ".ttf") {
-		if _, err := os.Stat(f); err == nil {
-			log.Infof("using font: %s", f)
-			return ioutil.ReadFile(f)
-		}
-	}
-	fdirs := []string{"/Library/Fonts/", "/usr/share/fonts/", "./"}
-
-	for _, dir := range fdirs {
-		fpath := filepath.Join(dir, f)
-		if _, err := os.Stat(fpath); err == nil {
-			log.Infof("using font: %s", fpath)
-			return ioutil.ReadFile(fpath)
-		}
-	}
-	log.Info("using font: DroidSans.ttf")
-	return Asset("DroidSans.ttf")
 }
 
 // takes a time based string 00:00:00 and converts it to milliseconds

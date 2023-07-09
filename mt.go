@@ -652,7 +652,7 @@ NOTE: fancy has best results if it is applied as last filter!
 	log.Debugf("config values: %s", b)
 
 	var errFont error
-	fontBytes, errFont = getFont(viper.GetString("font_all"))
+	fontBytes, errFont = bindata.GetFont(viper.GetString("font_all"))
 	if errFont != nil {
 		log.Warn("unable to load font, disabling timestamps and header")
 	}
